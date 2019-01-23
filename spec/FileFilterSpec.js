@@ -15,4 +15,3 @@ describe("FileFilter",()=>{
 		});
 	});
 });
-console.log("FileFilterSpec.js loaded");
