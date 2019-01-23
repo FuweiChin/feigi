@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Index of Tests</title>
+<style>
+body,ul,iframe{
+	margin:0;
+}
+
+.row::after{
+	content:"";
+	display:table;
+	clear:both;
+}
+.side-col{
+	float:left;
+	width:260px;
+}
+.menu{
+	width: 100%;
+	height: calc(100vh - 80px);
+	overflow: auto;
+}
+.menu a{
+	display:block;
+	border-radius:3px;
+}
+.menu .active{
+	background-color: #fcfcfc;
+}
+.stage{
+	border:none;
+	width: calc(100% - 275px);
+	height:calc(100vh - 15px);
+	overflow:auto;
+}
+</style>
+</head>
+<body>
+<div class="row">
+	<div class="side-col">
+		<h3>Specs</h3>
+		<ul class="menu">
+			<li><a href="SpecRunner.html" target="_stage" data-deps="../FileFilter.js">FileFilterSpec.js</a></li>
+			<li><a href="SpecRunner.html" target="_stage" data-deps="../BytesFormat.js">BytesFormatSpec.js</a></li>
+			<li><a href="SpecRunner.html" target="_stage" data-deps="../Timer.js">TimerSpec.js</a></li>
+		</ul>
+	</div>
+	<iframe id="_stage" name="_stage" class="stage" src="about:blank" frameborder="0"></iframe>
+</div>
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+<script>
+jQuery(function($){
+	$('.menu').on("click","a",function(e){
+		var ul=e.delegateTarget;
+		$(ul).find(".active").removeClass("active");
+		$(this).removeClass("active");
+	}).find("a").each(function(i,a){
+		var file=a.textContent;
+		var deps=a.dataset.deps;
+		a.search=`?file=${encodeURIComponent(file)}&deps=${encodeURIComponent(deps)}`;
+	});
+});
+</script>
+</body>
+</html>

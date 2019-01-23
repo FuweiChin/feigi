@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Jasmine Spec Runner</title>
+<link rel="stylesheet" href="https://unpkg.com/jasmine-core@3.3.0/lib/jasmine-core/jasmine.css" />
+<script src="https://unpkg.com/jasmine-core@3.3.0/lib/jasmine-core/jasmine.js"></script>
+<script src="https://unpkg.com/jasmine-core@3.3.0/lib/jasmine-core/jasmine-html.js"></script>
+<script src="support/boot.js"></script>
+<style>
+#status{
+	width: 100%;
+	height: 1em;
+	border-radius: 3px;
+	background-color: #fcfcfc;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+</style>
+</head>
+<body>
+<output id="status">Loading</output>
+<script src="https://unpkg.com/requirejs@2.3.6/require.js"></script>
+<script>
+function configJasmine(){
+	var env=jasmine.currentEnv_;
+	env.configure({
+		random: false
+	});
+	jasmine.DEFAULT_TIMEOUT_INTERVAL=7000;
+}
+function configRequireJS(){
+	require.config({
+		baseUrl: "./"
+	});
+}
+function loadSpecs(){
+	var params=new URLSearchParams(location.search);
+	var deps=(params.get("deps")||"").match(/[^,]+/g)||[];
+	var output=document.getElementById("status");
+	output.textContent="loading deps";
+	requirejs(deps,()=>{
+		output.textContent="loading specs";
+		var files=params.getAll("file");
+		requirejs(files,()=>{
+			if(files.length==0){
+				output.innerHTML=`Please pass search param 'deps' and 'file', see <a href="index.html">index.html</a>`;
+			}else{
+				output.parentNode.removeChild(output);
+				window.dispatchEvent(new Event("BDDSpecLoaded"));
+				status="";
+				setTimeout(()=>{
+					Array.prototype.forEach.call(document.querySelectorAll('a[href^="?"]'),function(a){
+						a.pathname=location.pathname;
+					});
+				},1000);
+			}
+		});
+	});
+}
+configJasmine();
+configRequireJS();
+loadSpecs();
+
+</script>
+</body>
+</html>
