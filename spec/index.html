@@ -7,7 +7,6 @@
 body,ul,iframe{
 	margin:0;
 }
-
 .row::after{
 	content:"";
 	display:table;
@@ -17,22 +16,47 @@ body,ul,iframe{
 	float:left;
 	width:260px;
 }
+h3{
+	margin:0;
+	padding:0.5em 0px;
+}
 .menu{
+	list-style-type: none;
+	padding-left: 0;
 	width: 100%;
-	height: calc(100vh - 80px);
+	height: calc(100vh - 110px);
 	overflow: auto;
+	counter-reset: spec;
 }
 .menu a{
+	text-decoration: none;
 	display:block;
+	padding:0.5em 15px;
 	border-radius:3px;
+	transition: background-color 0.2s ease-in-out;
+	counter-increment: spec;
 }
-.menu .active{
-	background-color: #fcfcfc;
+.menu a:hover{
+	background-color: #dbdde0;
+}
+.menu a.active{
+	background-color: #c7cbd1;
+	box-shadow: inset 1px 1px 3px #aaaaaa;
+}
+.menu a[data-async="true"]::after{
+	content:"async";
+	color: gray;
+	position: relative;
+	top:-0.5em;
+}
+#spec-count::after{
+	content: counter(spec);
 }
 .stage{
 	border:none;
+	margin-left:15px;
 	width: calc(100% - 275px);
-	height:calc(100vh - 15px);
+	height:calc(100vh - 5px);
 	overflow:auto;
 }
 </style>
@@ -44,8 +68,10 @@ body,ul,iframe{
 		<ul class="menu">
 			<li><a href="SpecRunner.html" target="_stage" data-deps="../FileFilter.js">FileFilterSpec.js</a></li>
 			<li><a href="SpecRunner.html" target="_stage" data-deps="../BytesFormat.js">BytesFormatSpec.js</a></li>
-			<li><a href="SpecRunner.html" target="_stage" data-deps="../Timer.js">TimerSpec.js</a></li>
+			<li><a href="SpecRunner.html" target="_stage" data-deps="../Timer.js" data-async="true">TimerSpec.js</a></li>
+			<li><a href="SpecRunner.html" target="_stage" data-deps="../path.js">pathSpec.js</a></li>
 		</ul>
+		<p>Registered <output id="spec-count"></output> specs</p>
 	</div>
 	<iframe id="_stage" name="_stage" class="stage" src="about:blank" frameborder="0"></iframe>
 </div>
@@ -55,10 +81,11 @@ jQuery(function($){
 	$('.menu').on("click","a",function(e){
 		var ul=e.delegateTarget;
 		$(ul).find(".active").removeClass("active");
-		$(this).removeClass("active");
+		$(this).addClass("active");
 	}).find("a").each(function(i,a){
 		var file=a.textContent;
-		var deps=a.dataset.deps;
+		var deps=a.dataset.deps||"";
+		var async=a.dataset.async=="true";
 		a.search=`?file=${encodeURIComponent(file)}&deps=${encodeURIComponent(deps)}`;
 	});
 });
