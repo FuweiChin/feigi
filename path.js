@@ -1,10 +1,11 @@
 /**
- * @module path
+ * path utilities for browser
+ * @namespace path
  */
 var path={
   /**
    * @readonly
-   * @type {string}
+   * @property {string} sep
    */
   get sep(){
     return "/";

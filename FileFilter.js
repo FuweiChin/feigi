@@ -11,7 +11,6 @@ class FileFilter{
 		this.conditions=accept.match(/[^,]+/g);
 	}
 	/**
-	 * @method accept
 	 * @param {File} file
 	 * @return {boolean}
 	 */

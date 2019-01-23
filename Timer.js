@@ -1,4 +1,5 @@
 /**
+ * JavaScript edition of ActionScript's flash.utils.Timer
  * @class
  */
 class Timer extends EventTarget {
@@ -13,7 +14,6 @@ class Timer extends EventTarget {
 		this._repeatCount=Math.max(repeatCount|0,0)||0x7FFFFFFF;
 		this._handle=0;
 		this._currentCount=0;
-		
 	}
 	/**
 	 * @property {number} delay
